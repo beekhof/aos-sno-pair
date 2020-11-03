@@ -94,7 +94,7 @@ spec:
     - "$NODE2NAME"
   containers:
   - name: system
-    image: quay.io/abeekhof/pacemaker
+    image: $IMAGE
     command: ["/usr/lib/systemd/systemd", "--system"]
     volumeMounts:
     - name: cluster-state
@@ -106,7 +106,7 @@ spec:
     securityContext:
       privileged: true
   - name: corosync
-    image: quay.io/abeekhof/pacemaker
+    image: $IMAGE
     command: [ '/usr/sbin/corosync', '-f']
     securityContext:
       privileged: true
@@ -114,7 +114,7 @@ spec:
     - name: cluster-state
       mountPath: /etc/corosync
   - name: pacemaker
-    image: quay.io/abeekhof/pacemaker
+    image: $IMAGE
     command: [ '/usr/sbin/pacemakerd', '-f' ]
     volumeMounts:
     - name: cluster-state
@@ -123,7 +123,7 @@ spec:
       mountPath: /var/lib/pacemaker
   initContainers:
   - name: init
-    image: quay.io/abeekhof/pacemaker
+    image: $IMAGE
     command: [ '/root/setup.sh']
     securityContext:
       privileged: true

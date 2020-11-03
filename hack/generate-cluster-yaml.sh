@@ -1,4 +1,6 @@
 #!/bin/bash
+export IMAGE=quay.io/omular/pcmk
+# export IMAGE=quay.io/abeekhof/pacemaker
 
 export AUTHKEY=$(cat $1 | base64 | tr -d '\n')
 export FENCEKEY=$(cat /etc/cluster/fence_xvm.key | base64 | tr -d '\n')

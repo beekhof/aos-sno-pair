@@ -15,7 +15,7 @@ RHCOS_IMAGE="/tmp/rhcos-46.82.202007051540-0-qemu.x86_64.qcow2"
 OS_VARIANT="rhel8.1"
 RAM_MB="16384"
 DISK_GB="20"
-DISK="/home/Development/virt/${VM_NAME}.cow"
+DISK="/home/qemu-virt/${VM_NAME}.cow"
 rm -f "${DISK}"
 
 LASTOCT=$(echo ${VM_NAME} | md5sum | cut -c 1-2)

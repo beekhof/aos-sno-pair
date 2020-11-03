@@ -3,6 +3,10 @@ KEY=$(shell cat /etc/cluster/fence_xvm.key)
 
 test: $(CLUSTER_NODES:%=dummy-%)
 
+start-%: clean-% generate-%
+	@echo Starting $*
+	sudo ./hack/virt-install-aio-ign.sh $*
+
 pair: $(CLUSTER_NODES:%=start-%)
 	hack/kube.sh cluster2 get pods -A -w
 
@@ -49,10 +53,14 @@ generate-%: %/install-config.yaml
 	ls -al $*
 	./bin/openshift-install create aio-config --dir=$*
 
+dummy2-%: dummy3-% dummy4-%
+	@echo dummy2-$*
 
-start-%: clean-% generate-%
-	@echo Starting $*
-	sudo ./hack/virt-install-aio-ign.sh $*
+dummy3-%:
+	@echo dummy3-$*
+
+dummy4-%:
+	@echo dummy4-$*
 
 load-%: authkey
 	./hack/generate-cluster-yaml.sh authkey $* $(CLUSTER_NODES)
