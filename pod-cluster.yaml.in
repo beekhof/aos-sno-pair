@@ -95,6 +95,7 @@ spec:
   containers:
   - name: system
     image: $IMAGE
+    imagePullPolicy: Always
     command: ["/usr/lib/systemd/systemd", "--system"]
     volumeMounts:
     - name: cluster-state
@@ -107,6 +108,7 @@ spec:
       privileged: true
   - name: corosync
     image: $IMAGE
+    imagePullPolicy: Always
     command: [ '/usr/sbin/corosync', '-f']
     securityContext:
       privileged: true
@@ -115,6 +117,7 @@ spec:
       mountPath: /etc/corosync
   - name: pacemaker
     image: $IMAGE
+    imagePullPolicy: Always
     command: [ '/usr/sbin/pacemakerd', '-f' ]
     volumeMounts:
     - name: cluster-state
@@ -124,6 +127,7 @@ spec:
   initContainers:
   - name: init
     image: $IMAGE
+    imagePullPolicy: Always
     command: [ '/root/setup.sh']
     securityContext:
       privileged: true
