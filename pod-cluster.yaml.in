@@ -142,7 +142,7 @@ spec:
       mountPath: /var/lib/pcsd
     - name: secret-volume
       readOnly: true
-      mountPath: "/etc/secret-volume"
+      mountPath: "$SECRETS_DIR"
     env:
     - name: NODE1NAME
       value: "$NODE1NAME"
@@ -154,6 +154,8 @@ spec:
       value: "$NODE2ADDR"
     - name: CLUSTER_NAME
       value: "aio-pair"
+    - name: SECRETS_DIR
+      value: "$SECRETS_DIR"
 ---
 apiVersion: apps/v1
 kind: Deployment

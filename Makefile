@@ -3,7 +3,8 @@ KEY=$(shell cat /etc/cluster/fence_xvm.key)
 
 test: $(CLUSTER_NODES:%=dummy-%)
 
-start-%: clean-% generate-%
+# start-%: clean-% generate-%
+start-%: clean-%
 	@echo Starting $*
 	sudo ./hack/virt-install-aio-ign.sh $*
 
@@ -51,7 +52,8 @@ clean-%:
 
 generate-%: %/install-config.yaml
 	ls -al $*
-	./bin/openshift-install create aio-config --dir=$*
+	./bin/openshift-install create ignition-configs --dir=$*
+	# ./bin/openshift-install create aio-config --dir=$*
 
 dummy2-%: dummy3-% dummy4-%
 	@echo dummy2-$*
@@ -64,11 +66,22 @@ dummy4-%:
 
 load-%: authkey
 	./hack/generate-cluster-yaml.sh authkey $* $(CLUSTER_NODES)
-	-kubectl --kubeconfig=./$*/auth/kubeconfig delete -f pod-$*.yaml 
-	kubectl --kubeconfig=./$*/auth/kubeconfig create -f pod-$*.yaml 
+	-hack/kube.sh $* delete -f pod-$*.yaml
+	hack/kube.sh $* create -f pod-$*.yaml
+	# -kubectl --kubeconfig=./$*/auth/kubeconfig delete -f pod-$*.yaml 
+	# kubectl --kubeconfig=./$*/auth/kubeconfig create -f pod-$*.yaml 
+
+load: $(CLUSTER_NODES:%=load-%)
+
+pods-%:
+	hack/kube.sh $* get pods
+
+pods-w-%:
+	hack/kube.sh $* get pods -w
 
 unload-%: 
-	-kubectl --kubeconfig=./$*/auth/kubeconfig delete -f pod-$*.yaml 
+	-hack/kube.sh $* delete -f pod-$*.yaml
+	# -kubectl --kubeconfig=./$*/auth/kubeconfig delete -f pod-$*.yaml 
 
 start: start-cluster1 start-cluster2
 
